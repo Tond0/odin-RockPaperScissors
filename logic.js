@@ -1,50 +1,55 @@
 let playerScore = 0;
 let cpuScore = 0;
 
-playGame();
+//playGame();
 
-function playGame() {
+const playerButtons = document.querySelectorAll(".playerButton");
+playerButtons.forEach((btn) => {
+  btn.addEventListener("click", () => playGame(btn.id));
+});
 
-  playerScore = 0;
-  cpuScore = 0;
+const logParagraph = document.querySelector(".log");
+const scoreParagraph = document.querySelector(".score");
 
-  for (let i = 0; i < 5; i++) {
-    console.log("Round numer " + i);
+function playGame(playerChoice) {
+  //let playerChoice = getPlayerChoice();
+  let cpuChoice = getCPUChoice();
 
-    let playerChoice = getPlayerChoice();
-    let cpuChoice = getCPUChoice();
+  let roundResult = playRound(cpuChoice, playerChoice);
+  switch (roundResult) {
+    case 0:
+      logParagraph.textContent = "Draw";
+      console.log("Draw");
+      break;
 
-    let roundResult = playRound(cpuChoice, playerChoice);
-    switch (roundResult) {
-      case 0:
-        console.log("Draw");
-        break;
+    case 1:
+      console.log("Cpu Won");
+      logParagraph.textContent = "CPU Won";
+      cpuScore += 1;
+      break;
 
-      case 1:
-        console.log("Cpu Won");
-        cpuScore += 1;
-        break;
+    case 2:
+      console.log("Player Won");
+      logParagraph.textContent = "Player Won";
+      playerScore += 1;
+      break;
 
-      case 2:
-        console.log("Player Won");
-        playerScore += 1;
-        break;
-
-      default:
-        console.log("Something broke!");
-        break;
-    }
-
-    console.log("Score is now: CPU " + cpuScore + " Player " + playerScore);
-    console.log("");
+    default:
+      console.log("Something broke!");
+      break;
   }
+
+  scoreParagraph.textContent = "CPU " + cpuScore + " - Player " + playerScore;
+  console.log("Score is now: CPU " + cpuScore + " Player " + playerScore);
+  console.log("");
 }
 
 function playRound(inCpuChoice, inPlayerChoice) {
   //Draw Condition
   if (inCpuChoice == inPlayerChoice) return 0;
   //Cpu Won Condition
-  if ((inCpuChoice > inPlayerChoice) || (inCpuChoice == 0 && inPlayerChoice == 2)) return 1;
+  if (inCpuChoice > inPlayerChoice || (inCpuChoice == 0 && inPlayerChoice == 2))
+    return 1;
   //Player Won Condition
   else return 2;
 }
@@ -56,15 +61,15 @@ function getCPUChoice() {
   switch (cpuChoice) {
     case 0:
       cpuChoiceString = "rock";
-    break;
+      break;
 
     case 1:
       cpuChoiceString = "paper";
-    break;
+      break;
 
     case 2:
       cpuChoiceString = "scissors";
-    break;
+      break;
   }
 
   console.log("CPU decided " + cpuChoiceString);
